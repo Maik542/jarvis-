@@ -20,27 +20,29 @@ Das bisherige GitHub-Repository enthält bereits eingecheckte Cache-Dateien und 
 | Person | Eigene Dateien auf `main` | Ergebnis |
 | --- | --- | --- |
 | Maik | `jarvis/skills/browser/browser_skill.py`, neue `tests/test_browser_skill.py` | Browser-Suche und YouTube-Play mit automatisierten Tests gegen Rückfälle absichern. |
-| Torben | neue `.github/workflows/checks.yml` | Automatische Windows-Prüfung für jeden Push auf `main` einrichten. |
+| Torben | `jarvis/core/context.py`, `main.py`, neue `tests/test_followup_commands.py` | Jarvis merkt sich die letzte Such- oder Play-Anfrage und versteht Anschlussbefehle wie `play that on youtube`. |
 
 ### Maiks Aufgabe
 
-Prüfe die Browser-Fälle `search youtube for ...` ohne Wiedergabe, `play ... on youtube` mit Video, Google-/GitHub-Suche, Tab schließen und beim nächsten Befehl erneut öffnen. Automatisierte Tests sollen das Befehlsverhalten prüfen, ohne ein echtes Chrome-Profil oder Internet vorauszusetzen. Einen echten Chrome-Durchlauf zusätzlich manuell ausführen. Spotify-Code und Torbens Workflow-Datei bleiben unangetastet.
+Prüfe die Browser-Fälle `search youtube for ...` ohne Wiedergabe, `play ... on youtube` mit Video, Google-/GitHub-Suche, Tab schließen und beim nächsten Befehl erneut öffnen. Automatisierte Tests sollen das Befehlsverhalten prüfen, ohne ein echtes Chrome-Profil oder Internet vorauszusetzen. Einen echten Chrome-Durchlauf zusätzlich manuell ausführen. Spotify-Code sowie Torbens Kontext- und CLI-Dateien bleiben unangetastet.
 
 **Fertig, wenn:** Tests für die genannten Fälle vorhanden sind; der echte Browser-Test funktioniert; `ruff check` und die vorhandene Testsuite bestehen; Maiks Commit nur seinen Bereich betrifft.
 
 ### Torbens Aufgabe
 
-Richte GitHub Actions für das gemeinsame Repository ein. Der Workflow soll bei jedem Push auf `main` auf einem Windows-Runner Python 3.12 einrichten, `requirements.txt` und `requirements-dev.txt` installieren, die komplette Testsuite mit `pytest -q` ausführen und `ruff check main.py jarvis tests` starten. Eine manuelle Ausführung über `workflow_dispatch` ist hilfreich, aber nicht zwingend. Nutze aktuelle offizielle Versionen der GitHub-Actions-Bausteine.
+Erweitere Jarvis um **Sitzungskontext für Anschlussbefehle**. Nach einer erfolgreichen Suche wie `search youtube for C418 Sweden` merkt Jarvis sich den ursprünglichen Suchtext. `play that on youtube` soll dann `C418 Sweden` über die bereits vorhandene YouTube-Play-Funktion starten; `play that on spotify` verwendet entsprechend die bestehende Spotify-Funktion. Nach einem erfolgreichen `play ... on youtube` oder `play ... on spotify` soll dieselbe Anfrage ebenfalls für einen Wechsel zum anderen Dienst verfügbar bleiben. Das ist eine neue, direkt nutzbare Fähigkeit und später der erste Kontextbaustein für eine LLM.
 
-Der Workflow darf weder Spotify-Zugangsdaten noch ein echtes Chrome-Profil benötigen; Maiks neue Browser-Tests verwenden Attrappen. Torben ändert in dieser Etappe weder `main.py` noch Maiks Browser-Dateien. Bei einem roten Lauf den konkreten Fehler untersuchen, statt Tests auszuschalten oder zu überspringen.
+Ohne vorherige Anfrage antwortet Jarvis verständlich und startet **nichts**. Leere oder fehlgeschlagene Befehle dürfen den letzten gültigen Suchtext nicht überschreiben. Der Kontext lebt nur bis `exit` beziehungsweise bis zum Neustart; keine Speicherung auf Platte. Torben nutzt `ExecutionContext` statt eines versteckten globalen Zustands, ändert aber weder `browser_skill.py` noch `spotify_skill.py` oder Maiks Browser-Tests. Die vorhandenen Befehle müssen unverändert funktionieren.
 
-**Fertig, wenn:** ein echter Lauf im GitHub-Tab „Actions“ auf `main` für Tests und Ruff grün ist, keine Secrets hinterlegt werden mussten und Torbens Commit nur die Workflow-Datei betrifft.
+**Fertig, wenn:** Offline-Tests die Fälle „Suche → play that“, „Play → anderer Dienst“, „kein Kontext → keine Aktion“ und „Neustart → leerer Kontext“ abdecken; vorhandene Tests und Ruff bestehen; ein echter Spotify- und Browser-Durchlauf nach dem Zusammenführen bestätigt wird; Torbens Commit nur seinen Bereich betrifft.
 
 ## Nach den beiden Aufgaben
 
-1. Torben teilt den geprüften Workflow-Commit auf `main`; Maik aktualisiert danach seinen Team-Clone.
+1. Torben teilt seinen geprüften Kontext-/CLI-Commit auf `main`; Maik aktualisiert danach seinen Team-Clone.
 2. Maik überträgt seinen im alten Ordner getesteten Browser-Test in den Team-Clone, prüft ihn dort erneut und teilt dann seinen Commit auf `main`.
-3. Beide kontrollieren, dass der neue GitHub-Actions-Lauf grün ist. Ein fehlgeschlagener Lauf wird vor der nächsten Funktion untersucht.
-4. Zusätzlich manuell ausführen: ein echter Chrome-Durchlauf einschließlich `Strg+W` sowie bei künftigen Spotify-Änderungen ein echter Spotify-Test.
+3. Gemeinsam ausführen: komplette Testsuite, Ruff, Typprüfung sowie echte Browser- und Spotify-Folgebefehle. Fehler erst beheben, bevor weitere Fähigkeiten dazukommen.
+4. Als nächster Architektur-Schritt werden Browser- und Spotify-Aktionen als klar benannte, geprüfte Tools registriert. Erst danach soll eine LLM aus freier Sprache einen erlaubten Tool-Aufruf vorschlagen; Jarvis prüft Argumente und Berechtigungen, bevor der bestehende Executor ihn ausführt. Die LLM erhält keinen direkten Shell- oder API-Zugriff.
+
+Eine GitHub-Actions-Prüfung für Pushes auf `main` bleibt eine sinnvolle spätere Team-Aufgabe, ersetzt aber keine neue Jarvis-Funktion.
 
 Der Plan kann nach der ersten Etappe angepasst werden. Neue Aufgaben bitte vor Beginn einer Datei und einer verantwortlichen Person zuordnen, damit unabhängiges Arbeiten auch wirklich unabhängig bleibt.
