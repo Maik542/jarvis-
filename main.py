@@ -42,7 +42,7 @@ async def main() -> None:
             command = raw_input.lower()
 
             if command == "exit":
-                # Verl?sst die Schleife; finally r?umt danach den Browser auf.
+                # Verlässt die Schleife; finally räumt danach den Browser auf.
                 print("Jarvis > Goodbye sir.")
                 break
 
@@ -51,7 +51,7 @@ async def main() -> None:
 
             try:
                 # Jede erkannte Aktion beendet nur diesen Durchlauf per continue;
-                # die n?chste Eingabe folgt ohne Neustart von Jarvis.
+                # die nächste Eingabe folgt ohne Neustart von Jarvis.
                 if command in websites:
                     await browser.open_url(websites[command])
                     print(f"Jarvis > Opening {websites[command]}")
@@ -59,13 +59,13 @@ async def main() -> None:
                     continue
 
                 if command == "open spotify":
-                    # URI-Schema von Windows: die installierte Spotify-App ?ffnen.
+                    # URI-Schema von Windows: die installierte Spotify-App öffnen.
                     os.startfile("spotify:")
                     print("Jarvis > Opening Spotify")
                     continue
 
                 if command == "pause spotify":
-                    # Spotipy ist synchron; to_thread h?lt die Eingabe-Schleife frei.
+                    # Spotipy ist synchron; to_thread hält die Eingabe-Schleife frei.
                     result = await asyncio.to_thread(spotify.pause)
                     print(f"Jarvis > {result}")
                     continue
@@ -87,7 +87,7 @@ async def main() -> None:
 
                 spotify_play_suffix = " on spotify"
 
-                # Die Spotify-Web-API arbeitet synchron und l?uft deshalb im Thread.
+                # Die Spotify-Web-API arbeitet synchron und läuft deshalb im Thread.
                 if command.startswith("play ") and command.endswith(spotify_play_suffix):
                     query = raw_input[5 : -len(spotify_play_suffix)].strip()
 
@@ -105,8 +105,8 @@ async def main() -> None:
 
                 search_handled = False
 
-                # Derselbe Syntaxaufbau f?r alle Suchdienste. Nur Spotify nutzt
-                # eine Desktop-URI; die anderen Ziele laufen ?ber BrowserSkill.
+                # Derselbe Syntaxaufbau für alle Suchdienste. Nur Spotify nutzt
+                # eine Desktop-URI; die anderen Ziele laufen über BrowserSkill.
                 for service in ("youtube", "google", "github", "spotify"):
                     prefix = f"search {service} for "
 
@@ -138,7 +138,7 @@ async def main() -> None:
                 print(f"Jarvis > Error: {error}")
 
     finally:
-        # Nur den von Jarvis gestarteten Browser schlie?en, nicht die Spotify-App.
+        # Nur den von Jarvis gestarteten Browser schließen, nicht die Spotify-App.
         await browser.close()
 
 
