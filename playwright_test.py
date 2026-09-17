@@ -14,6 +14,8 @@ from playwright.async_api import (
 )
 
 
+# ?lteres, eigenst?ndiges Browser-Experiment: NICHT der CLI-Einstiegspunkt.
+# Anders als "search youtube" in main.py startet dieses Skript ein Video.
 async def handle_cookie_window(page: Page) -> None:
     reject_text = page.get_by_text(
         re.compile(
@@ -53,6 +55,7 @@ async def search_youtube(
     search_url = f"https://www.youtube.com/results?search_query={quote_plus(query)}"
 
     context = await playwright.chromium.launch_persistent_context(
+        # Gleiches lokales Profil wie BrowserSkill: Erweiterungen bleiben erhalten.
         user_data_dir=str(profile_directory),
         channel="chrome",
         headless=False,
@@ -61,6 +64,7 @@ async def search_youtube(
     )
 
     try:
+        # Ein bereits vorhandener Tab wird vor einem neuen Tab bevorzugt.
         if context.pages:
             page = context.pages[0]
         else:
@@ -78,6 +82,7 @@ async def search_youtube(
         print("Jarvis > Searching for the first video.")
 
         try:
+            # Hier wird bewusst der erste Suchtreffer angeklickt.
             first_video = page.locator("ytd-video-renderer").locator("a#video-title").first
 
             await first_video.wait_for(
@@ -108,6 +113,7 @@ async def search_youtube(
             print("Jarvis > I could not find or open a video.")
 
         await asyncio.to_thread(
+            # Enter schlie?t nur diesen Test-Browser; die Suchschleife l?uft weiter.
             input,
             "Jarvis > Press Enter to close the browser.",
         )

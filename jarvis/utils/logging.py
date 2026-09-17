@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 
 LOG_DIR = Path(__file__).resolve().parents[1] / "logs"
+# Logdateien bleiben lokal im Projekt; das Verzeichnis bei Bedarf anlegen.
 LOG_DIR.mkdir(exist_ok=True)
 
 
@@ -13,6 +14,7 @@ def configure_logging() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
+    # Bereits konfigurierte Handler wiederverwenden, sonst g?be es doppelte Logs.
     if logger.handlers:
         return logger
 
@@ -23,6 +25,7 @@ def configure_logging() -> logging.Logger:
     file_handler.setLevel(logging.INFO)
 
     stream_handler = logging.StreamHandler()
+    # Dieselben Meldungen gehen in die Datei und auf die Konsole.
     stream_handler.setFormatter(formatter)
     stream_handler.setLevel(logging.INFO)
 

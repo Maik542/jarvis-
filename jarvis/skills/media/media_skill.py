@@ -7,6 +7,8 @@ class MediaSkill:
     """Foundation for media playback controls."""
 
     def __init__(self) -> None:
+        # Allgemeiner Medien-Entwurf; echte Wiedergabe l?uft aktuell ?ber
+        # BrowserSkill (YouTube) oder SpotifySkill (Spotify).
         self.tools = [
             SyncTool(
                 name="media.play",
@@ -25,7 +27,9 @@ class MediaSkill:
         ]
 
     def play(self, source: str) -> str:
+        # Platzhalter: Meldet nur die geplante Aktion zur?ck.
         return f"Media tool prepared to play: {source}"
 
     def pause(self) -> str:
+        # Platzhalter: Pausiert keine laufende Wiedergabe.
         return "Media tool prepared to pause playback."

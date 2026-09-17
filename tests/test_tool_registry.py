@@ -6,6 +6,7 @@ from jarvis.core.exceptions import DuplicateToolError, ToolNotFoundError
 from jarvis.core.tool import RiskLevel, Tool, ToolParameter
 
 
+# Kleines Test-Werkzeug ohne Browser, Spotify oder andere externe Dienste.
 class FakeTool(Tool):
     def __init__(self, name: str = "fake.echo") -> None:
         super().__init__(
@@ -38,6 +39,7 @@ def test_duplicate_registration_raises() -> None:
     registry = ToolRegistry()
     registry.register(FakeTool())
 
+    # pytest.raises erwartet genau diesen Fehler; ohne Fehler schl?gt der Test fehl.
     with pytest.raises(DuplicateToolError):
         registry.register(FakeTool())
 
@@ -72,6 +74,7 @@ async def test_execute_basic_fake_tool() -> None:
     registry.register(FakeTool())
 
     plan = Plan(goal="echo", steps=[PlanStep(tool="fake.echo", arguments={"value": "hello"})])
+    # Executor f?hrt den registrierten Namen mit den Plan-Argumenten aus.
     result = await Executor(registry).execute(plan)
 
     assert result.success is True

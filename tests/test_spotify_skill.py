@@ -9,6 +9,8 @@ from jarvis.skills.spotify import spotify_skill
 from jarvis.skills.spotify.spotify_skill import SpotifySkill
 
 
+# Beispielantworten der Spotify-API. overrides ersetzt einzelne Felder,
+# damit ein Test gezielt z. B. ein fremdes Ger?t nachstellen kann.
 def make_device(**overrides: Any) -> dict[str, Any]:
     return {
         "id": "local-device",
@@ -43,6 +45,7 @@ def make_playback(progress_ms: int | None, **overrides: Any) -> dict[str, Any]:
 
 @pytest.fixture
 def mocked_spotify(monkeypatch: pytest.MonkeyPatch) -> tuple[SpotifySkill, MagicMock]:
+    # Alles Externe abfangen: keine Anmeldung, keine Musik und keine Wartezeit.
     monkeypatch.setenv("COMPUTERNAME", "MAIK")
     monkeypatch.setattr(spotify_skill.os, "startfile", MagicMock(), raising=False)
     monkeypatch.setattr(spotify_skill.time, "sleep", MagicMock())
@@ -56,6 +59,7 @@ def mocked_spotify(monkeypatch: pytest.MonkeyPatch) -> tuple[SpotifySkill, Magic
     client.search.return_value = {"tracks": {"items": [make_track()]}}
     client.current_playback.side_effect = [make_playback(100), make_playback(600)]
     skill = SpotifySkill()
+    # Der vorbereitete Fake-Client verhindert einen echten OAuth-Aufruf.
     skill._spotify = client
     return skill, client
 
@@ -112,6 +116,7 @@ def test_accepted_playback_without_advancing_progress_is_not_success_or_retried(
     client.current_playback.side_effect = None
     client.current_playback.return_value = make_playback(100)
 
+    # API-Erfolg allein reicht nicht, wenn die Abspielposition stehen bleibt.
     with pytest.raises(RuntimeError):
         skill.play_track("C418 Sweden")
 
@@ -134,6 +139,7 @@ def test_accepted_playback_without_advancing_progress_is_not_success_or_retried(
         [make_playback(None), make_playback(None)],
         [{}, {}],
     ],
+    # Ein Test pro ung?ltigem Wiedergabezustand.
     ids=["wrong-device", "wrong-track", "paused", "missing-progress", "no-playback"],
 )
 def test_verification_rejects_wrong_or_incomplete_playback(

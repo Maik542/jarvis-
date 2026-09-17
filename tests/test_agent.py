@@ -5,6 +5,7 @@ import pytest
 from jarvis.core.agent import JarvisAgent
 
 
+# Diese Tests pr?fen nur das Agent-Ger?st, nicht die Befehle in main.py.
 @pytest.mark.asyncio
 async def test_agent_starts_and_handles_help() -> None:
     agent = JarvisAgent()

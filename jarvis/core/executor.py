@@ -15,6 +15,7 @@ logger = get_logger("core.executor")
 class StepResult:
     """Execution result for a single plan step."""
 
+    # Ergebnis oder Fehlermeldung eines einzelnen Werkzeugaufrufs.
     step: PlanStep
     success: bool
     result: Any = None
@@ -25,6 +26,7 @@ class StepResult:
 class ExecutionResult:
     """Result of a full plan execution."""
 
+    # Enth?lt auch die bereits erledigten Schritte, wenn ein sp?terer scheitert.
     goal: str
     steps: list[StepResult] = field(default_factory=list)
     success: bool = True
@@ -39,10 +41,14 @@ class Executor:
 
     async def execute(self, plan: Plan) -> ExecutionResult:
         step_results: list[StepResult] = []
+        # Schritte laufen nacheinander; beim ersten Fehler wird abgebrochen.
+        # Vor LLM-generierten Pl?nen fehlen hier noch Freigabe und Argumentpr?fung.
         for step in plan.steps:
+            # Ein unbekannter Tool-Name wirft derzeit vor dem try-Block einen Fehler.
             tool = self.tool_registry.get(step.tool)
             logger.info("Running tool %s with args %s", tool.name, step.arguments)
             try:
+                # Keyword-Argumente aus dem Plan gehen direkt an das Werkzeug.
                 result = await tool.execute(**step.arguments)
                 step_results.append(
                     StepResult(step=step, success=True, result=result, error=None)

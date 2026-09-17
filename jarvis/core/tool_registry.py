@@ -8,10 +8,12 @@ class ToolRegistry:
     """Registry for runtime tool discovery and execution."""
 
     def __init__(self) -> None:
+        # Der Werkzeugname ist der eindeutige Schl?ssel f?r den Executor.
         self._tools: dict[str, Tool] = {}
 
     def register(self, tool: Tool, replace: bool = False) -> None:
         """Register a tool. Set replace=True to overwrite an existing tool."""
+        # Standardm??ig doppelte Namen ablehnen, damit nichts still ?berschrieben wird.
         if tool.name in self._tools and not replace:
             raise DuplicateToolError(f"Tool '{tool.name}' is already registered.")
         self._tools[tool.name] = tool
@@ -30,6 +32,7 @@ class ToolRegistry:
 
     def list_tools(self) -> list[Tool]:
         """Return all registered tools sorted by name."""
+        # Stabile Reihenfolge hilft bei Hilfe-Ausgaben und Tests.
         return sorted(self._tools.values(), key=lambda tool: tool.name)
 
     def has(self, name: str) -> bool:

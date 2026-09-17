@@ -7,6 +7,8 @@ class ScreenInspector:
     """Placeholder for future screen understanding features."""
 
     def __init__(self) -> None:
+        # F?r einen k?nftigen Screenshot-Pfad reserviert; capture setzt ihn
+        # in dieser fr?hen Version noch nicht.
         self.last_capture_path: Path | None = None
 
     def capture(self) -> str:

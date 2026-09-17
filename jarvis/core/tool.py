@@ -10,6 +10,7 @@ from typing import Any
 class RiskLevel(StrEnum):
     """Action risk categories for future computer-use safety checks."""
 
+    # Metadaten f?r sp?tere Freigaben; Executor erzwingt diese Stufen noch nicht.
     SAFE = "safe"
     CONFIRM = "confirm"
     DANGEROUS = "dangerous"
@@ -19,6 +20,7 @@ class RiskLevel(StrEnum):
 class ToolParameter:
     """Describes a single tool parameter."""
 
+    # Schema-Beschreibung f?r k?nftige Planung; noch keine Laufzeitvalidierung.
     name: str
     type: str
     description: str = ""
@@ -30,6 +32,7 @@ class ToolParameter:
 class Tool(ABC):
     """Base class for all tools."""
 
+    # Jedes konkrete Werkzeug hat einen Namen und muss execute implementieren.
     name: str
     description: str
     parameters: list[ToolParameter] = field(default_factory=list)
@@ -58,4 +61,6 @@ class SyncTool(Tool):
         self._func = func
 
     async def execute(self, **kwargs: Any) -> Any:
+        # Direkter synchroner Aufruf: Langsame Funktionen blockieren hier asyncio.
+        # main.py nutzt f?r Spotify deshalb ausdr?cklich asyncio.to_thread().
         return self._func(**kwargs)

@@ -7,6 +7,7 @@ class ComputerSkill:
     """Foundation for future Windows desktop automation."""
 
     def __init__(self) -> None:
+        # Geplante Computer-Werkzeuge; noch nicht mit der CLI verbunden.
         self.tools = [
             SyncTool(
                 name="computer.open_application",
@@ -27,7 +28,9 @@ class ComputerSkill:
         ]
 
     def open_application(self, name: str) -> str:
+        # Platzhalter: Keine echte Anwendung wird ge?ffnet.
         return f"Computer tool prepared to open: {name}"
 
     def screenshot(self) -> str:
+        # Platzhalter: Noch kein Bild wird aufgenommen.
         return "Computer tool prepared to capture a screenshot."

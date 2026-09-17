@@ -7,6 +7,7 @@ class SystemSkill:
     """Foundation for local system actions and metadata queries."""
 
     def __init__(self) -> None:
+        # Nur Werkzeugbeschreibungen; main.py registriert diesen Skill noch nicht.
         self.tools = [
             SyncTool(
                 name="system.open_path",
@@ -25,7 +26,9 @@ class SystemSkill:
         ]
 
     def open_path(self, path: str) -> str:
+        # Platzhalter: ?ffnet derzeit keine Datei oder Anwendung.
         return f"System tool prepared to open path: {path}"
 
     def get_running_apps(self) -> str:
+        # Platzhalter: Fragt noch keine Windows-Prozesse ab.
         return "System tool prepared to list running applications."
