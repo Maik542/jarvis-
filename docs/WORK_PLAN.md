@@ -2,7 +2,7 @@
 
 Dieser Plan teilt die **erste parallele Etappe** auf. Das gemeinsame öffentliche Repository ist [Maik542/jarvis-](https://github.com/Maik542/jarvis-). Maik und Torben arbeiten mit getrennten lokalen Clones, aber auf demselben GitHub-Branch `main`. Torben braucht dafür Schreibzugriff auf das Repository; ohne diesen Zugriff kann er nicht auf den gemeinsamen Branch pushen.
 
-Wichtig für Maik: Der bisherige lokale Projektordner besitzt einen eigenen Initial-Commit und noch keinen `origin`-Remote. Seine Git-Historie ist **nicht** die Historie dieses GitHub-Repositories, obwohl die zentralen Python-Dateien derzeit gleich sind. Für die Teamarbeit bitte einen **neuen Clone** des GitHub-Repositories anlegen; den alten Ordner als Sicherung behalten. Nicht dessen `main` direkt zum GitHub-`main` pushen und die Historien nicht mit `--force` oder `--allow-unrelated-histories` verbinden.
+Wichtig für Maik: Der bisherige lokale Projektordner besitzt einen eigenen Initial-Commit und noch keinen `origin`-Remote. Seine Git-Historie ist **nicht** die Historie dieses GitHub-Repositories, obwohl die zentralen Python-Dateien derzeit gleich sind. Maik kann dort weiterhin Code schreiben und lokal testen. Für den gemeinsamen Commit und Push übernimmt er aber nur die geprüften, selbst geänderten Dateien in seinen **neuen Clone** des GitHub-Repositories und testet dort erneut. Den alten Ordner als Sicherung behalten; nicht dessen `main` direkt zum GitHub-`main` pushen oder die Historien mit `--force` beziehungsweise `--allow-unrelated-histories` verbinden.
 
 ## Gemeinsame Spielregeln
 
@@ -20,27 +20,27 @@ Das bisherige GitHub-Repository enthält bereits eingecheckte Cache-Dateien und 
 | Person | Eigene Dateien auf `main` | Ergebnis |
 | --- | --- | --- |
 | Maik | `jarvis/skills/browser/browser_skill.py`, neue `tests/test_browser_skill.py` | Browser-Suche und YouTube-Play mit automatisierten Tests gegen Rückfälle absichern. |
-| Torben | neue `jarvis/core/commands.py`, neue `tests/test_commands.py` | Reinen, testbaren Befehls-Parser ohne Browser-, Spotify- oder Datei-Nebenwirkungen bauen. |
+| Torben | neue `.github/workflows/checks.yml` | Automatische Windows-Prüfung für jeden Push auf `main` einrichten. |
 
 ### Maiks Aufgabe
 
-Prüfe die Browser-Fälle `search youtube for ...` ohne Wiedergabe, `play ... on youtube` mit Video, Google-/GitHub-Suche, Tab schließen und beim nächsten Befehl erneut öffnen. Automatisierte Tests sollen das Befehlsverhalten prüfen, ohne ein echtes Chrome-Profil oder Internet vorauszusetzen. Einen echten Chrome-Durchlauf zusätzlich manuell ausführen. Spotify-Code und Torbens Parser-Dateien bleiben unangetastet.
+Prüfe die Browser-Fälle `search youtube for ...` ohne Wiedergabe, `play ... on youtube` mit Video, Google-/GitHub-Suche, Tab schließen und beim nächsten Befehl erneut öffnen. Automatisierte Tests sollen das Befehlsverhalten prüfen, ohne ein echtes Chrome-Profil oder Internet vorauszusetzen. Einen echten Chrome-Durchlauf zusätzlich manuell ausführen. Spotify-Code und Torbens Workflow-Datei bleiben unangetastet.
 
 **Fertig, wenn:** Tests für die genannten Fälle vorhanden sind; der echte Browser-Test funktioniert; `ruff check` und die vorhandene Testsuite bestehen; Maiks Commit nur seinen Bereich betrifft.
 
 ### Torbens Aufgabe
 
-Erstelle eine Funktion, die Eingabetext in eine klare Befehlsbeschreibung umwandelt, zum Beispiel Aktion (`open`, `search`, `play`, `pause`, `exit`), Dienst (`youtube`, `google`, `github`, `spotify`) und Suchtext. Die Schlüsselwörter sind unabhängig von Groß-/Kleinschreibung; der Suchtext behält die Schreibweise des Nutzers. Leere Suchtexte und unbekannte Befehle sollen ein eindeutiges Ergebnis liefern. Der Parser selbst darf keine Programme öffnen, API-Aufrufe machen oder Musik starten.
+Richte GitHub Actions für das gemeinsame Repository ein. Der Workflow soll bei jedem Push auf `main` auf einem Windows-Runner Python 3.12 einrichten, `requirements.txt` und `requirements-dev.txt` installieren, die komplette Testsuite mit `pytest -q` ausführen und `ruff check main.py jarvis tests` starten. Eine manuelle Ausführung über `workflow_dispatch` ist hilfreich, aber nicht zwingend. Nutze aktuelle offizielle Versionen der GitHub-Actions-Bausteine.
 
-Mindestens diese Fälle testen: `search youtube for C418 Sweden`, `search google for Python lernen`, `search github for playwright`, `search spotify for Sweden`, `play C418 Sweden on youtube`, `play C418 Sweden on spotify`, `pause spotify`, `open github`, `exit` und unbekannte Eingaben. `main.py` bei dieser Aufgabe **noch nicht** ändern; die Integration folgt nach dem gemeinsamen Review.
+Der Workflow darf weder Spotify-Zugangsdaten noch ein echtes Chrome-Profil benötigen; Maiks neue Browser-Tests verwenden Attrappen. Torben ändert in dieser Etappe weder `main.py` noch Maiks Browser-Dateien. Bei einem roten Lauf den konkreten Fehler untersuchen, statt Tests auszuschalten oder zu überspringen.
 
-**Fertig, wenn:** der Parser vollständig offline testbar ist; die genannten Befehle korrekt erkannt werden; die vorhandenen Tests weiter bestehen; Torbens Commit nur seinen Bereich betrifft.
+**Fertig, wenn:** ein echter Lauf im GitHub-Tab „Actions“ auf `main` für Tests und Ruff grün ist, keine Secrets hinterlegt werden mussten und Torbens Commit nur die Workflow-Datei betrifft.
 
-## Integration nach den beiden Aufgaben
+## Nach den beiden Aufgaben
 
-1. Beide teilen ihre geprüften Commits nacheinander auf `main` und aktualisieren anschließend ihren jeweiligen Clone.
-2. Maik schreibt `main.py` nach Absprache selbst so um, dass es Torbens Parser nutzt. Das bisherige Such-/Play-Verhalten bleibt gleich.
-3. Torben prüft diese Integration besonders auf Parser-Grenzfälle und unerwartete Nebenwirkungen.
-4. Gemeinsam ausführen: komplette Testsuite, Ruff, Typprüfung sowie je ein echter Browser- und Spotify-Test. Danach erst die nächste Funktion auswählen.
+1. Torben teilt den geprüften Workflow-Commit auf `main`; Maik aktualisiert danach seinen Team-Clone.
+2. Maik überträgt seinen im alten Ordner getesteten Browser-Test in den Team-Clone, prüft ihn dort erneut und teilt dann seinen Commit auf `main`.
+3. Beide kontrollieren, dass der neue GitHub-Actions-Lauf grün ist. Ein fehlgeschlagener Lauf wird vor der nächsten Funktion untersucht.
+4. Zusätzlich manuell ausführen: ein echter Chrome-Durchlauf einschließlich `Strg+W` sowie bei künftigen Spotify-Änderungen ein echter Spotify-Test.
 
 Der Plan kann nach der ersten Etappe angepasst werden. Neue Aufgaben bitte vor Beginn einer Datei und einer verantwortlichen Person zuordnen, damit unabhängiges Arbeiten auch wirklich unabhängig bleibt.
