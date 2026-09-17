@@ -1,0 +1,18 @@
+.venv/
+.env
+.spotify_cache
+__pycache__/
+*.pyc
+*.log
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+logs/*.log
+.idea/
+.vscode/*.local.*
+
+# Allow shared VS Code settings
+!.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
