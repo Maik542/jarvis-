@@ -6,7 +6,7 @@ Dieses Dokument ist für einen menschlichen Mitentwickler gedacht. Du brauchst d
 
 Wenn du ChatGPT oder ein anderes GPT als Lernhilfe verwendest, gib ihm den folgenden Einstieg. Bei Codefragen hänge danach die betroffenen aktuellen Dateien oder einen Commit-/PR-Link an; ein Chat kennt spätere Änderungen nicht automatisch. Falls dein GPT GitHub-Links nicht öffnen kann, kopiere die drei genannten Markdown-Dateien in den Chat.
 
-> Ich arbeite mit Maik am öffentlichen Python-Projekt https://github.com/Maik542/jarvis-. Lies README.md, docs/TORBEN_START.md und docs/WORK_PLAN.md als Projektkontext. Ich arbeite ohne Codex in meinem eigenen Git-Clone. Meine erste Aufgabe ist der reine Befehls-Parser in jarvis/core/commands.py mit Tests in tests/test_commands.py; main.py wird erst nach dem Review integriert. Erhalte das vorhandene Browser- und Spotify-Verhalten. Gib bei Vorschlägen betroffene Dateien, konkrete Tests und offene Annahmen an. Fordere niemals .env, OAuth-Tokens oder andere Zugangsdaten an. Behaupte nicht, Änderungen im Repository vorgenommen zu haben, wenn du nur Text vorgeschlagen hast.
+> Ich arbeite mit Maik am öffentlichen Python-Projekt https://github.com/Maik542/jarvis-. Lies README.md, docs/TORBEN_START.md und docs/WORK_PLAN.md als Projektkontext. Ich arbeite ohne Codex in meinem eigenen Git-Clone; wir teilen uns den GitHub-Branch main und bearbeiten getrennte Dateien. Meine erste Aufgabe ist der reine Befehls-Parser in jarvis/core/commands.py mit Tests in tests/test_commands.py; main.py wird erst nach dem Review integriert. Erhalte das vorhandene Browser- und Spotify-Verhalten. Gib bei Vorschlägen betroffene Dateien, konkrete Tests und offene Annahmen an. Fordere niemals .env, OAuth-Tokens oder andere Zugangsdaten an. Behaupte nicht, Änderungen im Repository vorgenommen zu haben, wenn du nur Text vorgeschlagen hast.
 
 ## Ziel und aktueller Stand
 
@@ -54,6 +54,6 @@ Python 3.12 oder neuer ist erforderlich; falls `py -3.12` nicht installiert ist,
 
 ## Zusammenarbeit
 
-Maik schreibt seine Python-Änderungen selbst in VS Code; Codex darf ihm Code erklären und nach dem Speichern prüfen, aber seine Python-Dateien nicht direkt ändern. Torben entwickelt seine eigenen Aufgaben selbstständig ohne Codex. Jede Person arbeitet in ihrem eigenen Clone und Feature-Branch. Die erste konkrete Dateiaufteilung und Abnahmekriterien stehen im [Arbeitsplan](WORK_PLAN.md).
+Maik schreibt seine Python-Änderungen selbst in VS Code; Codex darf ihm Code erklären und nach dem Speichern prüfen, aber seine Python-Dateien nicht direkt ändern. Torben entwickelt seine eigenen Aufgaben selbstständig ohne Codex. Jede Person arbeitet in ihrem eigenen Clone; beide verwenden den gemeinsamen Branch `main`. Die erste konkrete Dateiaufteilung und Abnahmekriterien stehen im [Arbeitsplan](WORK_PLAN.md).
 
-Vor einer Änderung an `main.py` oder an Dateien der anderen Person bitte kurz abstimmen. Öffne für eine fertige Aufgabe einen Pull Request nach `main` und nenne darin Verhalten, betroffene Dateien und Testergebnis. So kann die andere Person die Änderung nachvollziehen, bevor sie zusammengeführt wird.
+Vor einer Änderung an `main.py` oder an Dateien der anderen Person bitte kurz abstimmen. Nach einer fertigen Aufgabe nenne dem anderen Commit, Verhalten, betroffene Dateien und Testergebnis. Vor einem Push den aktuellen Stand von `main` prüfen; nie mit `--force` fremde Änderungen überschreiben.
