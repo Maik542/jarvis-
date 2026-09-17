@@ -2,6 +2,8 @@
 
 Dieser Plan teilt die **erste parallele Etappe** auf. Das gemeinsame öffentliche Repository ist [Maik542/jarvis-](https://github.com/Maik542/jarvis-). Torben kann es sofort klonen; für einen Branch direkt im Repository braucht er Schreibzugriff. Ohne Schreibzugriff kann er in seinem eigenen Fork arbeiten und von dort einen Pull Request öffnen.
 
+Wichtig für Maik: Der bisherige lokale Projektordner besitzt einen eigenen Initial-Commit und noch keinen `origin`-Remote. Seine Git-Historie ist **nicht** die Historie dieses GitHub-Repositories, obwohl die zentralen Python-Dateien derzeit gleich sind. Nach dem Zusammenführen dieser Dokumentation bitte einen **neuen Clone** des GitHub-Repositories für die Teamarbeit anlegen; den alten Ordner als Sicherung behalten. Nicht dessen `main` direkt zum GitHub-`main` pushen und die Historien nicht mit `--force` oder `--allow-unrelated-histories` verbinden.
+
 ## Gemeinsame Spielregeln
 
 1. Jeder verwendet einen eigenen Clone und einen eigenen Branch von aktuellem `main`. Nicht gleichzeitig im selben Arbeitsverzeichnis arbeiten. Torben startet mit `git clone https://github.com/Maik542/jarvis-.git`.
