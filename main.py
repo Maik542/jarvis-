@@ -17,7 +17,7 @@ def search_spotify(query: str) -> None:
 async def main() -> None:
     print("Jarvis V0.1")
 
-    # Beide Skills bleiben f?r die ganze Eingabeschleife erhalten. So kann
+    # Beide Skills bleiben für die ganze Eingabeschleife erhalten. So kann
     # ein weiterer Befehl denselben Browser und dieselbe Spotify-Sitzung nutzen.
     browser = BrowserSkill()
     spotify = SpotifySkill()
