@@ -1,21 +1,40 @@
+Metadata-Version: 2.4
+Name: jarvis
+Version: 0.1.0
+Summary: Local AI desktop assistant foundation
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: pydantic>=2.7.4
+Requires-Dist: httpx>=0.27.0
+Requires-Dist: playwright>=1.46.0
+Requires-Dist: pywinauto>=0.6.8
+Requires-Dist: pyautogui>=0.9.54
+Requires-Dist: Pillow>=10.4.0
+Requires-Dist: spotipy>=2.24.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3.2; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.23.8; extra == "dev"
+Requires-Dist: ruff>=0.6.1; extra == "dev"
+Requires-Dist: mypy>=1.11.1; extra == "dev"
+
 # Jarvis V0.1
 
-Jarvis is a local Python assistant for Windows. It can search the web in its own Chrome profile and control the Spotify desktop app.
+Jarvis is a local AI desktop assistant foundation designed for future computer-use automation, browser orchestration, Spotify control, media handling, and local tooling.
 
-This is a learning project. It does not yet implement autonomous computer control or a production-grade AI reasoning engine.
+This repository is intentionally focused on a clean architecture and a working CLI shell. It does not yet implement autonomous computer control or a production-grade AI reasoning engine.
 
 ## Project status
 
 Current milestone:
 
 - Project foundation and package layout
-- Interactive CLI commands for browser search, YouTube playback, and Spotify
-- Persistent Jarvis Chrome profile under `%LOCALAPPDATA%\Jarvis\BrowserProfile`
+- CLI and basic agent lifecycle
 - Tool + registry abstraction
 - Planner and executor skeletons
 - Skill architecture for browser, computer, media, Spotify, and system
 - Logging and configuration foundation
-- Automated tests for core registry/agent behavior and Spotify playback
+- Automated tests for core registry/agent behavior
 
 ## Architecture overview
 
@@ -34,8 +53,7 @@ The project is organized into a small set of reusable layers:
 
 - Python >= 3.12
 - Access to a local development environment
-- Google Chrome for the Jarvis browser
-- Spotify desktop app and a Spotify Premium account for playback commands
+- Optional browser runtime for future Playwright automation
 
 ## Virtual environment setup
 
@@ -54,9 +72,15 @@ pip install -r requirements.txt
 pip install -r requirements-dev.txt
 ```
 
-## Browser setup
+## Playwright browser installation
 
-Jarvis uses the installed Google Chrome through Playwright. Its separate profile keeps browser data between runs. Close any other Jarvis process using that profile before starting another one.
+Playwright requires browser binaries to be installed separately:
+
+```powershell
+playwright install chromium
+```
+
+The project will not auto-download browsers when you start the CLI.
 
 ## Environment setup
 
@@ -74,21 +98,12 @@ The repository intentionally keeps secrets out of source control.
 python main.py
 ```
 
-Available commands include:
+You will see a basic interactive CLI shell with commands such as:
 
-- `search youtube for C418 Sweden` — show YouTube results without playing
-- `search google for Python lernen` — search Google in Jarvis Chrome
-- `search github for Python` — search GitHub in Jarvis Chrome
-- `search spotify for C418 Sweden` — search in the Spotify desktop app
-- `play C418 Sweden on youtube` — open the first matching YouTube video
-- `play C418 Sweden on spotify` — play through the Spotify desktop app
-- `pause spotify` — pause Spotify playback
-- `open youtube`, `open google`, `open github`, `open spotify`
-- `exit` — close Jarvis and its browser
-
-Use `Strg+W` to close the current Chrome tab. Jarvis stays at its command prompt.
-
-Spotify playback requires a developer app and the `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, and `SPOTIFY_REDIRECT_URI` values in your local `.env`. Never commit `.env` or `.spotify_cache`.
+- `help`
+- `tools`
+- `status`
+- `exit`
 
 ## Running tests
 
@@ -120,4 +135,4 @@ V1.0 - Integrated local Jarvis assistant
 
 ## Notes
 
-This foundation does not include destructive computer control, unrestricted shell execution, or advanced autonomous behavior.
+This foundation intentionally keeps the scope limited to clean architecture, registration, execution flow, and actionable shell startup. It does not include destructive computer control, unrestricted shell execution, or advanced autonomous behavior.
